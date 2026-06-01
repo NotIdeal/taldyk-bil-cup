@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mezun Cup 2027 — Taldykorgan BIL</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700&display=swap');
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green:  #1a7a3c;
+      --green2: #25a854;
+      --gold:   #f0c040;
+      --gold2:  #ffd966;
+      --dark:   #060d09;
+      --white:  #ffffff;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--dark);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ═══════════════════════════════
+       CANVAS — particles + spotlight
+    ═══════════════════════════════ */
+    #bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* ═══════════════════════════════
+       SCANLINES OVERLAY
+    ═══════════════════════════════ */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.07) 3px,
+        rgba(0,0,0,0.07) 4px
+      );
+    }
+
+    /* ═══════════════════════════════
+       HERO
+    ═══════════════════════════════ */
+    .hero {
+      position: relative;
+      z-index: 2;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    /* ── entrance animations ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.8s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 1.3rem;
+      border-radius: 2rem;
+      border: 1px solid rgba(240,192,64,0.5);
+      background: rgba(240,192,64,0.08);
+      color: var(--gold);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 1.8rem;
+      animation-delay: 0.1s;
+      position: relative;
+      overflow: hidden;
+    }
+    /* shimmer sweep */
+    .badge::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%   { left: -100%; }
+      50%, 100% { left: 150%; }
+    }
+
+    /* ── SCHOOL NAME ── */
+    .school-name {
+      font-weight: 300;
+      font-size: clamp(0.8rem, 2vw, 1rem);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 0.6rem;
+      animation-delay: 0.2s;
+    }
+
+    /* ── YEAR — glitch ── */
+    .title-year {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(6rem, 22vw, 20rem);
+      line-height: 0.82;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      position: relative;
+      animation-delay: 0.3s;
+      text-shadow:
+        0 0 40px rgba(37,168,84,0.5),
+        0 0 100px rgba(37,168,84,0.2);
+    }
+    /* glitch pseudo-elements */
+    .title-year::before,
+    .title-year::after {
+      content: '2027';
+      position: absolute;
+      inset: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: inherit;
+      line-height: inherit;
+      letter-spacing: inherit;
+    }
+    .title-year::before {
+      color: rgba(37,168,84,0.6);
+      clip-path: polygon(0 20%, 100% 20%, 100% 45%, 0 45%);
+      animation: glitch-a 4s infinite;
+    }
+    .title-year::after {
+      color: rgba(240,192,64,0.4);
+      clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+      animation: glitch-b 4s infinite;
+    }
+    @keyframes glitch-a {
+      0%,86%,100% { transform: translate(0); opacity: 0; }
+      88%  { transform: translate(-4px, 1px); opacity: 1; }
+      90%  { transform: translate(4px, -1px); opacity: 1; }
+      92%  { transform: translate(-2px, 0);   opacity: 1; }
+      94%  { transform: translate(0);         opacity: 0; }
+    }
+    @keyframes glitch-b {
+      0%,88%,100% { transform: translate(0); opacity: 0; }
+      90%  { transform: translate(5px, 2px);  opacity: 1; }
+      92%  { transform: translate(-3px, -1px);opacity: 1; }
+      94%  { transform: translate(2px, 0);    opacity: 1; }
+      96%  { transform: translate(0);         opacity: 0; }
+    }
+
+    /* ── MEZUN CUP ── */
+    .title-cup {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 8vw, 6.5rem);
+      letter-spacing: 0.3em;
+      line-height: 1;
+      margin-top: 0.15rem;
+      animation-delay: 0.4s;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 50%, var(--gold) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeUp 0.8s cubic-bezier(.22,1,.36,1) 0.4s forwards,
+                 goldShine 3s linear 1s infinite;
+      opacity: 0;
+    }
+    @keyframes goldShine {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: clamp(60px, 12vw, 120px);
+      height: 2px;
+      margin: 1.6rem auto;
+      background: linear-gradient(90deg, transparent, var(--green2), transparent);
+      position: relative;
+      animation-delay: 0.5s;
+    }
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green2);
+      box-shadow: 0 0 8px var(--green2), 0 0 20px var(--green2);
+    }
+
+    /* ── BALL ── */
+    .ball-wrap {
+      margin: 0.5rem 0 0.8rem;
+      animation-delay: 0.55s;
+    }
+    .ball {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      display: inline-block;
+      animation: ballFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 12px rgba(37,168,84,0.6));
+    }
+    @keyframes ballFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50%       { transform: translateY(-10px) rotate(180deg); }
+    }
+
+    /* ── PRESENTS ── */
+    .presents-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      animation-delay: 0.6s;
+    }
+    .presents-line {
+      flex: 1;
+      max-width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25));
+    }
+    .presents-line.right {
+      background: linear-gradient(270deg, transparent, rgba(255,255,255,0.25));
+    }
+    .presents-text {
+      font-size: clamp(0.65rem, 1.8vw, 0.9rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      white-space: nowrap;
+    }
+    .presents-text strong {
+      color: var(--white);
+      font-weight: 700;
+    }
+    .presents-text .class-b {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* ── COMING SOON ── */
+    .coming-soon {
+      margin-top: 2.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      animation-delay: 0.75s;
+    }
+    .coming-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+    }
+    .coming-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .feature-chip {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.32rem 0.85rem;
+      border-radius: 2rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.03);
+      transition: border-color 0.3s, color 0.3s;
+      cursor: default;
+    }
+    .feature-chip:hover {
+      border-color: rgba(240,192,64,0.4);
+      color: var(--gold);
+    }
+
+    /* ── FIELD RINGS ── */
+    .ring {
+      position: fixed;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.04);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .ring-1 { width: 40vmin; height: 40vmin; animation: ringPulse 5s ease-in-out infinite; }
+    .ring-2 { width: 70vmin; height: 70vmin; animation: ringPulse 5s ease-in-out 0.8s infinite; }
+    .ring-3 { width: 100vmin; height: 100vmin; animation: ringPulse 5s ease-in-out 1.6s infinite; }
+    @keyframes ringPulse {
+      0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+      50%       { opacity: 0.7; transform: translate(-50%, -50%) scale(1.03); }
+    }
+
+    /* ── BOTTOM BAR ── */
+    .bottom-bar {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.18);
+      text-transform: uppercase;
+      z-index: 3;
+    }
+
+    /* ── CORNER MARKS ── */
+    .corner {
+      position: fixed;
+      width: 20px; height: 20px;
+      z-index: 3;
+      opacity: 0.3;
+    }
+    .corner::before, .corner::after {
+      content: '';
+      position: absolute;
+      background: var(--green2);
+    }
+    .corner::before { width: 2px; height: 100%; }
+    .corner::after  { width: 100%; height: 2px; }
+    .corner.tl { top: 1.5rem; left: 1.5rem; }
+    .corner.tr { top: 1.5rem; right: 1.5rem; transform: scaleX(-1); }
+    .corner.bl { bottom: 1.5rem; left: 1.5rem; transform: scaleY(-1); }
+    .corner.br { bottom: 1.5rem; right: 1.5rem; transform: scale(-1); }
+  </style>
+</head>
+<body>
+
+  <!-- background canvas -->
+  <canvas id="bg"></canvas>
+  <div class="scanlines"></div>
+
+  <!-- field rings -->
+  <div class="ring ring-1"></div>
+  <div class="ring ring-2"></div>
+  <div class="ring ring-3"></div>
+
+  <!-- corner marks -->
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <section class="hero">
+    <div class="hero-content">
+
+      <div class="badge fade-up">⚽ Annual Alumni Football Tournament</div>
+
+      <p class="school-name fade-up">Taldykorgan BIL</p>
+
+      <div class="title-year fade-up">2027</div>
+      <div class="title-cup">MEZUN&nbsp;CUP</div>
+
+      <div class="divider fade-up"></div>
+
+      <div class="ball-wrap fade-up">
+        <span class="ball">⚽</span>
+      </div>
+
+      <div class="presents-wrap fade-up">
+        <span class="presents-line"></span>
+        <span class="presents-text">
+          Presented by <strong>Class of 2019</strong> <span class="class-b">B</span>
+        </span>
+        <span class="presents-line right"></span>
+      </div>
+
+      <div class="coming-soon fade-up">
+        <span class="coming-label">Coming soon</span>
+        <div class="coming-features">
+          <span class="feature-chip">Teams</span>
+          <span class="feature-chip">Schedule</span>
+          <span class="feature-chip">Standings</span>
+          <span class="feature-chip">Playoff Bracket</span>
+          <span class="feature-chip">Live Results</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="bottom-bar">taldyk.bil.cup &nbsp;·&nbsp; Taldykorgan Bilim-Innovation Lyceum</div>
+
+  <script>
+    /* ════════════════════════════════════════
+       CANVAS — particles + moving spotlight
+    ════════════════════════════════════════ */
+    const canvas = document.getElementById('bg');
+    const ctx    = canvas.getContext('2d');
+
+    let W, H;
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    /* ── particles ── */
+    const PARTICLE_COUNT = 90;
+    const particles = Array.from({ length: PARTICLE_COUNT }, () => spawnParticle(true));
+
+    function spawnParticle(random) {
+      return {
+        x:    random ? Math.random() * window.innerWidth  : (Math.random() > 0.5 ? -5 : window.innerWidth + 5),
+        y:    random ? Math.random() * window.innerHeight : Math.random() * window.innerHeight,
+        r:    Math.random() * 1.8 + 0.3,
+        vx:   (Math.random() - 0.5) * 0.4,
+        vy:  -(Math.random() * 0.5 + 0.1),
+        alpha: Math.random() * 0.6 + 0.1,
+        color: Math.random() > 0.5 ? '37,168,84' : '240,192,64',
+      };
+    }
+
+    /* ── spotlight ── */
+    const spot = { x: W * 0.5, y: H * 0.5, tx: W * 0.5, ty: H * 0.5 };
+    let spotTimer = 0;
+    function moveSpot() {
+      spot.tx = W * (0.25 + Math.random() * 0.5);
+      spot.ty = H * (0.2  + Math.random() * 0.6);
+    }
+    moveSpot();
+
+    /* ── shooting stars ── */
+    const stars = [];
+    function spawnStar() {
+      stars.push({
+        x: Math.random() * W,
+        y: 0,
+        len: Math.random() * 120 + 60,
+        speed: Math.random() * 6 + 4,
+        angle: Math.PI / 4 + (Math.random() - 0.5) * 0.3,
+        alpha: 1,
+      });
+    }
+    setInterval(spawnStar, 2800);
+
+    function draw(ts) {
+      requestAnimationFrame(draw);
+      ctx.clearRect(0, 0, W, H);
+
+      /* background gradient */
+      const bg = ctx.createRadialGradient(W/2, H, 0, W/2, H/2, H);
+      bg.addColorStop(0,   'rgba(26,122,60,0.25)');
+      bg.addColorStop(0.5, 'rgba(6,20,10,0.95)');
+      bg.addColorStop(1,   'rgba(6,13,9,1)');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+
+      /* field stripe pattern */
+      ctx.save();
+      for (let i = 0; i < W; i += 80) {
+        ctx.fillStyle = i % 160 === 0 ? 'rgba(255,255,255,0.012)' : 'rgba(0,0,0,0)';
+        ctx.fillRect(i, 0, 80, H);
+      }
+      ctx.restore();
+
+      /* spotlight */
+      spot.x += (spot.tx - spot.x) * 0.008;
+      spot.y += (spot.ty - spot.y) * 0.008;
+      spotTimer += 0.005;
+      if (spotTimer > 1) { spotTimer = 0; moveSpot(); }
+      const sp = ctx.createRadialGradient(spot.x, spot.y, 0, spot.x, spot.y, H * 0.55);
+      sp.addColorStop(0,   'rgba(37,168,84,0.07)');
+      sp.addColorStop(0.4, 'rgba(37,168,84,0.03)');
+      sp.addColorStop(1,   'transparent');
+      ctx.fillStyle = sp;
+      ctx.fillRect(0, 0, W, H);
+
+      /* particles */
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y < -10 || p.x < -10 || p.x > W + 10) Object.assign(p, spawnParticle(false), { x: Math.random() * W, y: H + 5 });
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
+        ctx.fill();
+      }
+
+      /* shooting stars */
+      for (let i = stars.length - 1; i >= 0; i--) {
+        const s = stars[i];
+        s.x += Math.cos(s.angle) * s.speed;
+        s.y += Math.sin(s.angle) * s.speed;
+        s.alpha -= 0.018;
+        if (s.alpha <= 0) { stars.splice(i, 1); continue; }
+        ctx.save();
+        ctx.globalAlpha = s.alpha;
+        ctx.strokeStyle = 'rgba(240,220,120,0.9)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(s.x, s.y);
+        ctx.lineTo(s.x - Math.cos(s.angle) * s.len, s.y - Math.sin(s.angle) * s.len);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    requestAnimationFrame(draw);
+  </script>
+</body>
+</html>
