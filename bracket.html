@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playoff — Mezun Cup 2027</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .bracket-scroll { overflow-x: auto; padding-bottom: 1rem; }
+
+    .bracket {
+      display: flex; align-items: stretch;
+      gap: 0; min-width: 860px;
+      padding: 1.5rem 0;
+    }
+
+    /* each round column */
+    .round {
+      display: flex; flex-direction: column; flex: 1; min-width: 160px;
+    }
+    .round-header {
+      text-align: center; font-size: .58rem; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(255,255,255,.25); padding-bottom: .7rem;
+      border-bottom: 1px solid var(--border); margin-bottom: 0;
+    }
+    .round-body {
+      flex: 1; display: flex; flex-direction: column;
+      justify-content: space-around; padding: .5rem 0;
+    }
+
+    /* connector column */
+    .conn { width: 28px; flex-shrink: 0; display: flex; flex-direction: column; padding-top: 2.4rem; }
+    .conn-pair { flex: 1; display: flex; flex-direction: column; align-items: flex-end; justify-content: center; }
+    .conn-top    { flex: 1; width: 1px; background: rgba(255,255,255,.1); align-self: flex-end; }
+    .conn-mid    { width: 28px; height: 1px; background: rgba(255,255,255,.1); }
+    .conn-bot    { flex: 1; width: 1px; background: rgba(255,255,255,.1); align-self: flex-end; }
+
+    /* match block */
+    .bm {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 9px; overflow: hidden; margin: 5px 6px;
+      transition: border-color .2s;
+    }
+    .bm:hover { border-color: rgba(37,168,84,.3); }
+    .bm.champion { border-color: rgba(240,192,64,.5); box-shadow: 0 0 20px rgba(240,192,64,.1); }
+
+    .bm-slot {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .5rem .7rem; font-size: .75rem;
+    }
+    .bm-slot + .bm-slot { border-top: 1px solid var(--border); }
+    .bm-slot .s-icon { font-size: .9rem; flex-shrink: 0; }
+    .bm-slot .s-name { flex: 1; color: rgba(255,255,255,.2); font-style: italic; font-weight: 400; }
+    .bm-slot .s-name.real { color: var(--white); font-style: normal; font-weight: 700; }
+    .bm-slot .s-score { font-family: 'Bebas Neue',sans-serif; font-size: .95rem; color: rgba(255,255,255,.2); min-width: 14px; text-align: center; }
+    .bm-slot.won .s-name  { color: var(--white); font-style: normal; font-weight: 700; }
+    .bm-slot.won .s-score { color: var(--gold); }
+    .bm-slot.lost .s-name  { color: rgba(255,255,255,.3); }
+    .bm-slot.lost .s-score { color: rgba(255,255,255,.25); }
+
+    /* trophy column */
+    .trophy-col {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 0 1.2rem; flex-shrink: 0; padding-top: 2.4rem;
+    }
+    .trophy-icon { font-size: 2.8rem; filter: drop-shadow(0 0 16px rgba(240,192,64,.5)); animation: tFloat 3s ease-in-out infinite; }
+    @keyframes tFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    .trophy-label { font-size: .55rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); opacity: .6; margin-top: .4rem; }
+    .champ-box { margin-top: .6rem; background: rgba(240,192,64,.08); border: 1px solid rgba(240,192,64,.3); border-radius: 8px; padding: .5rem .9rem; text-align: center; min-width: 110px; }
+    .champ-box .cl { font-size: .5rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(240,192,64,.45); margin-bottom: .25rem; }
+    .champ-box .cn { font-size: .8rem; color: rgba(255,255,255,.2); font-style: italic; }
+    .champ-box .cn.real { color: var(--white); font-style: normal; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a class="nav-logo" href="index.html"><span class="logo-icon">⚽</span><span class="logo-text">MEZUN CUP <span class="logo-year">2027</span></span></a>
+    <div class="nav-links">
+      <a href="teams.html">Teams</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="standings.html">Standings</a>
+      <a href="bracket.html" class="active">Playoff</a>
+      <a href="results.html">Results</a>
+    </div>
+  </nav>
+  <!-- mobile bottom nav -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-links">
+      <a href="teams.html"><span class="mn-icon">🏃</span>Teams</a>
+      <a href="schedule.html"><span class="mn-icon">📅</span>Schedule</a>
+      <a href="standings.html"><span class="mn-icon">📊</span>Standings</a>
+      <a href="bracket.html" class="active"><span class="mn-icon">🏆</span>Playoff</a>
+      <a href="results.html"><span class="mn-icon">⚡</span>Results</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="page-header">
+      <h1>PLAYOFF <span>BRACKET</span></h1>
+      <p>Knockout stage · 8 teams · Mezun Cup 2027</p>
+    </div>
+
+    <div style="font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:.5rem;text-align:center">← Scroll to see full bracket →</div>
+    <div class="bracket-scroll">
+      <div class="bracket">
+
+        <!-- ── QUARTER-FINALS ── -->
+        <div class="round">
+          <div class="round-header">Quarter-finals</div>
+          <div class="round-body">
+
+            <div class="bm">
+              <div class="bm-slot won"><span class="s-icon">🏆</span><span class="s-name real">2019 B</span><span class="s-score">—</span></div>
+              <div class="bm-slot lost"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+            </div>
+
+            <div class="bm">
+              <div class="bm-slot"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+              <div class="bm-slot"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+            </div>
+
+            <div class="bm">
+              <div class="bm-slot"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+              <div class="bm-slot"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+            </div>
+
+            <div class="bm">
+              <div class="bm-slot"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+              <div class="bm-slot"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- connector QF→SF -->
+        <div class="conn">
+          <div class="conn-pair" style="flex:1"><div style="display:flex;flex-direction:column;align-items:flex-end;height:100%"><div class="conn-top"></div><div class="conn-mid"></div><div class="conn-bot"></div></div></div>
+          <div class="conn-pair" style="flex:1"><div style="display:flex;flex-direction:column;align-items:flex-end;height:100%"><div class="conn-top"></div><div class="conn-mid"></div><div class="conn-bot"></div></div></div>
+          <div class="conn-pair" style="flex:1"><div style="display:flex;flex-direction:column;align-items:flex-end;height:100%"><div class="conn-top"></div><div class="conn-mid"></div><div class="conn-bot"></div></div></div>
+          <div class="conn-pair" style="flex:1"><div style="display:flex;flex-direction:column;align-items:flex-end;height:100%"><div class="conn-top"></div><div class="conn-mid"></div><div class="conn-bot"></div></div></div>
+        </div>
+
+        <!-- ── SEMI-FINALS ── -->
+        <div class="round">
+          <div class="round-header">Semi-finals</div>
+          <div class="round-body">
+
+            <div class="bm" style="margin:auto 6px">
+              <div class="bm-slot won"><span class="s-icon">🏆</span><span class="s-name real">2019 B</span><span class="s-score">—</span></div>
+              <div class="bm-slot lost"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+            </div>
+
+            <div class="bm" style="margin:auto 6px">
+              <div class="bm-slot"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+              <div class="bm-slot"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- connector SF→F -->
+        <div class="conn">
+          <div class="conn-pair" style="flex:1"><div style="display:flex;flex-direction:column;align-items:flex-end;height:100%"><div class="conn-top"></div><div class="conn-mid"></div><div class="conn-bot"></div></div></div>
+          <div class="conn-pair" style="flex:1"><div style="display:flex;flex-direction:column;align-items:flex-end;height:100%"><div class="conn-top"></div><div class="conn-mid"></div><div class="conn-bot"></div></div></div>
+        </div>
+
+        <!-- ── FINAL ── -->
+        <div class="round">
+          <div class="round-header">Final</div>
+          <div class="round-body" style="justify-content:center">
+            <div class="bm champion" style="margin:0 6px">
+              <div class="bm-slot won"><span class="s-icon">🏆</span><span class="s-name real">2019 B</span><span class="s-score">—</span></div>
+              <div class="bm-slot lost"><span class="s-icon" style="opacity:.2">⬜</span><span class="s-name">TBD</span><span class="s-score">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TROPHY ── -->
+        <div class="trophy-col">
+          <div class="trophy-icon">🏆</div>
+          <div class="trophy-label">Champion</div>
+          <div class="champ-box">
+            <div class="cl">Winner</div>
+            <div class="cn real">🏆 2019 B</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+  <footer class="footer">mezuncup.kz · Taldykorgan Bilim-Innovation Lyceum · 2027</footer>
+</body>
+</html>

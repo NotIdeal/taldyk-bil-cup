@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teams — Mezun Cup 2027</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .teams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+
+    .team-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.4rem; display: flex; flex-direction: column; gap: 1rem; transition: border-color .25s, transform .2s; }
+    .team-card:hover { border-color: rgba(37,168,84,.4); transform: translateY(-2px); }
+    .team-card.organiser { border-color: rgba(240,192,64,.3); }
+
+    .team-header { display: flex; align-items: center; gap: 1rem; }
+    .team-badge { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--dark2), var(--green)); border: 2px solid rgba(37,168,84,.4); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+    .team-badge.gold-badge { background: linear-gradient(135deg,#1a2a10,#6a4e10); border-color: rgba(240,192,64,.5); }
+    .team-info h3 { font-size: 1rem; font-weight: 700; }
+    .team-info p { font-size: .72rem; color: rgba(255,255,255,.35); margin-top: .2rem; }
+
+    .org-tag { display: inline-block; background: rgba(240,192,64,.12); border: 1px solid rgba(240,192,64,.3); color: var(--gold); font-size: .55rem; font-weight: 700; letter-spacing: .1em; padding: .1rem .5rem; border-radius: 4px; text-transform: uppercase; margin-left: .4rem; vertical-align: middle; }
+
+    .team-players { display: flex; flex-direction: column; gap: .35rem; }
+    .player-row { display: flex; align-items: center; gap: .7rem; padding: .4rem .6rem; border-radius: 7px; background: rgba(255,255,255,.03); font-size: .78rem; }
+    .player-num { width: 22px; text-align: center; font-size: .65rem; font-weight: 700; color: var(--gold); opacity: .7; }
+    .player-name { flex: 1; color: rgba(255,255,255,.75); }
+    .player-pos { font-size: .6rem; font-weight: 600; letter-spacing: .08em; padding: .15rem .45rem; border-radius: 4px; background: rgba(37,168,84,.15); color: var(--green2); }
+
+    .team-footer { display: flex; justify-content: space-between; align-items: center; padding-top: .8rem; border-top: 1px solid var(--border); }
+    .team-footer span { font-size: .65rem; color: rgba(255,255,255,.3); }
+    .team-footer strong { font-size: .8rem; color: rgba(255,255,255,.5); }
+
+    .tbd-card { background: transparent; border: 1px dashed rgba(255,255,255,.1); border-radius: 14px; padding: 1.4rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .6rem; min-height: 180px; }
+    .tbd-card .tbd-icon { font-size: 1.6rem; opacity: .2; }
+    .tbd-card .tbd-text { font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(255,255,255,.2); }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a class="nav-logo" href="index.html"><span class="logo-icon">⚽</span><span class="logo-text">MEZUN CUP <span class="logo-year">2027</span></span></a>
+    <div class="nav-links">
+      <a href="teams.html" class="active">Teams</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="standings.html">Standings</a>
+      <a href="bracket.html">Playoff</a>
+      <a href="results.html">Results</a>
+    </div>
+  </nav>
+  <!-- mobile bottom nav -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-links">
+      <a href="teams.html" class="active"><span class="mn-icon">🏃</span>Teams</a>
+      <a href="schedule.html"><span class="mn-icon">📅</span>Schedule</a>
+      <a href="standings.html"><span class="mn-icon">📊</span>Standings</a>
+      <a href="bracket.html"><span class="mn-icon">🏆</span>Playoff</a>
+      <a href="results.html"><span class="mn-icon">⚡</span>Results</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="page-header">
+      <h1>PARTICIPATING <span>TEAMS</span></h1>
+      <p>Mezun Cup 2027 · Taldykorgan BIL Alumni · 8 teams</p>
+    </div>
+
+    <div class="section-title">Registered teams</div>
+    <div class="teams-grid">
+
+      <!-- 2019 B — organiser, only real team -->
+      <div class="team-card organiser">
+        <div class="team-header">
+          <div class="team-badge gold-badge">🏆</div>
+          <div class="team-info">
+            <h3>Class of 2019 B <span class="org-tag">Organiser</span></h3>
+            <p>Taldykorgan BIL · 2019</p>
+          </div>
+        </div>
+        <div class="team-players">
+          <div class="player-row"><span class="player-num">—</span><span class="player-name">Add player name</span><span class="player-pos">GK</span></div>
+          <div class="player-row"><span class="player-num">—</span><span class="player-name">Add player name</span><span class="player-pos">DEF</span></div>
+          <div class="player-row"><span class="player-num">—</span><span class="player-name">Add player name</span><span class="player-pos">MID</span></div>
+          <div class="player-row"><span class="player-num">—</span><span class="player-name">Add player name</span><span class="player-pos">FWD</span></div>
+          <div class="player-row"><span class="player-num">—</span><span class="player-name">Add player name</span><span class="player-pos">FWD</span></div>
+        </div>
+        <div class="team-footer"><span>Squad size</span><strong>— / 11</strong></div>
+      </div>
+
+      <!-- 7 TBD slots -->
+      <div class="tbd-card"><span class="tbd-icon">🏃</span><span class="tbd-text">Team 2 · TBD</span></div>
+      <div class="tbd-card"><span class="tbd-icon">🏃</span><span class="tbd-text">Team 3 · TBD</span></div>
+      <div class="tbd-card"><span class="tbd-icon">🏃</span><span class="tbd-text">Team 4 · TBD</span></div>
+      <div class="tbd-card"><span class="tbd-icon">🏃</span><span class="tbd-text">Team 5 · TBD</span></div>
+      <div class="tbd-card"><span class="tbd-icon">🏃</span><span class="tbd-text">Team 6 · TBD</span></div>
+      <div class="tbd-card"><span class="tbd-icon">🏃</span><span class="tbd-text">Team 7 · TBD</span></div>
+      <div class="tbd-card"><span class="tbd-icon">🏃</span><span class="tbd-text">Team 8 · TBD</span></div>
+
+    </div>
+  </main>
+  <footer class="footer">mezuncup.kz · Taldykorgan Bilim-Innovation Lyceum · 2027</footer>
+</body>
+</html>

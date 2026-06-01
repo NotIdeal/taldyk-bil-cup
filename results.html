@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Results — Mezun Cup 2027</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+
+    .result-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .result-card-top { display: flex; justify-content: space-between; align-items: center; padding: .55rem 1rem; background: rgba(255,255,255,.02); font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.25); border-bottom: 1px solid var(--border); }
+
+    .result-body { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 1.2rem 1rem; gap: .5rem; }
+    .res-team { display: flex; flex-direction: column; align-items: center; gap: .3rem; }
+    .res-icon { font-size: 1.6rem; opacity: .2; }
+    .res-name { font-size: .75rem; color: rgba(255,255,255,.2); font-style: italic; text-align: center; }
+    .res-score-wrap { text-align: center; }
+    .res-score { font-family: 'Bebas Neue',sans-serif; font-size: 2.2rem; letter-spacing: .1em; color: rgba(255,255,255,.2); line-height: 1; }
+    .res-score .sep { color: rgba(255,255,255,.1); }
+    .res-min { font-size: .6rem; color: rgba(255,255,255,.2); margin-top: .15rem; }
+
+    .result-card-bottom { padding: .55rem 1rem; border-top: 1px solid var(--border); display: flex; gap: .5rem; flex-wrap: wrap; }
+    .goal-item { font-size: .62rem; color: rgba(255,255,255,.2); font-style: italic; }
+
+    /* empty state */
+    .empty-state { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .8rem; padding: 4rem 2rem; border: 1px dashed rgba(255,255,255,.08); border-radius: 12px; color: rgba(255,255,255,.2); text-align: center; }
+    .empty-state .e-icon { font-size: 3rem; opacity: .3; }
+    .empty-state .e-title { font-size: .9rem; font-weight: 600; letter-spacing: .05em; }
+    .empty-state .e-sub { font-size: .72rem; color: rgba(255,255,255,.15); }
+
+    /* scorers */
+    .scorer-row { display: flex; align-items: center; gap: 1rem; padding: .7rem 1rem; border-bottom: 1px solid var(--border); }
+    .scorer-rank { font-family: 'Bebas Neue',sans-serif; font-size: 1.2rem; color: rgba(255,255,255,.15); width: 26px; text-align: center; }
+    .scorer-info { flex: 1; }
+    .scorer-name { font-size: .82rem; color: rgba(255,255,255,.2); font-style: italic; }
+    .scorer-team { font-size: .62rem; color: rgba(255,255,255,.15); margin-top: .1rem; }
+    .scorer-goals { font-family: 'Bebas Neue',sans-serif; font-size: 1.2rem; color: rgba(255,255,255,.15); }
+    .scorer-goals span { font-size: .6rem; color: rgba(255,255,255,.12); font-family: 'Inter',sans-serif; font-weight: 400; }
+
+    .tbd-row-inner { display: flex; align-items: center; gap: 1rem; padding: .7rem 1rem; border-bottom: 1px solid var(--border); opacity: .35; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a class="nav-logo" href="index.html"><span class="logo-icon">⚽</span><span class="logo-text">MEZUN CUP <span class="logo-year">2027</span></span></a>
+    <div class="nav-links">
+      <a href="teams.html">Teams</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="standings.html">Standings</a>
+      <a href="bracket.html">Playoff</a>
+      <a href="results.html" class="active">Results</a>
+    </div>
+  </nav>
+  <!-- mobile bottom nav -->
+  <nav class="mobile-nav">
+    <div class="mobile-nav-links">
+      <a href="teams.html"><span class="mn-icon">🏃</span>Teams</a>
+      <a href="schedule.html"><span class="mn-icon">📅</span>Schedule</a>
+      <a href="standings.html"><span class="mn-icon">📊</span>Standings</a>
+      <a href="bracket.html"><span class="mn-icon">🏆</span>Playoff</a>
+      <a href="results.html" class="active"><span class="mn-icon">⚡</span>Results</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="page-header">
+      <h1>MATCH <span>RESULTS</span></h1>
+      <p>All results · Mezun Cup 2027</p>
+    </div>
+
+    <div class="section-title">Latest results</div>
+    <div class="results-grid">
+      <div class="empty-state">
+        <span class="e-icon">⚽</span>
+        <span class="e-title">No results yet</span>
+        <span class="e-sub">Results will appear here after matches are played · May 30, 2027</span>
+      </div>
+    </div>
+
+    <!-- Top scorers placeholder -->
+    <div style="margin-top:2.5rem">
+      <div class="section-title">Top Scorers</div>
+      <div class="card">
+        <div class="tbd-row-inner"><span style="font-size:.8rem;color:rgba(255,255,255,.2);font-style:italic">🥇 &nbsp; Player — TBD</span></div>
+        <div class="tbd-row-inner"><span style="font-size:.8rem;color:rgba(255,255,255,.2);font-style:italic">🥈 &nbsp; Player — TBD</span></div>
+        <div class="tbd-row-inner"><span style="font-size:.8rem;color:rgba(255,255,255,.2);font-style:italic">🥉 &nbsp; Player — TBD</span></div>
+        <div class="tbd-row-inner" style="border:none"><span style="font-size:.8rem;color:rgba(255,255,255,.2);font-style:italic">4. &nbsp; Player — TBD</span></div>
+      </div>
+    </div>
+
+  </main>
+  <footer class="footer">mezuncup.kz · Taldykorgan Bilim-Innovation Lyceum · 2027</footer>
+</body>
+</html>
